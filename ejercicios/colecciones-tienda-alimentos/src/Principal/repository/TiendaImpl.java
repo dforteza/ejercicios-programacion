@@ -55,12 +55,6 @@ public class TiendaImpl implements Tienda
             else
                 pedido.put(item, cantidad);
         }
-
-        System.out.print("Código de descuento (Enter para omitir): ");
-        String codigo = sc.nextLine();
-
-        if (codigo.equals("ECODTO"))
-            System.out.println("Descuento del 10% aplicado.");
     }
 
 

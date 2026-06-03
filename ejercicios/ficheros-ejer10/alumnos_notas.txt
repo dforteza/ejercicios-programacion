@@ -1,0 +1,10 @@
+Ana Garcia;8;6;9;7
+Carlos Martinez;5;7;6
+Maria Fernandez;9;8;10;6;7
+Luis Lopez;4;5
+Sofia Perez;7;8;9;6;8;10
+Juan Rodriguez;6;5;7;8
+Elena Sanchez;9;10;8;9
+Pablo Gomez;3;5;4
+Laura Torres;7;6;8
+Diego Ramirez;8;9;7;6;5

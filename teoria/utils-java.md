@@ -7,6 +7,7 @@
 4. [final vs static final](#4-final-vs-static-final)
 5. [Fechas y horas — java.time](#5-fechas-y-horas--javatime)
 6. [equals y hashCode](#6-equals-y-hashcode)
+7. [Strings — format y StringBuilder](#7-strings--format-y-stringbuilder)
 
 ---
 
@@ -295,76 +296,105 @@ String.format("%02d/%02d/%04d", d.getDayOfMonth(), d.getMonthValue(), d.getYear(
 // → "24/05/2026"
 ```
 
-**Opción 2 — con `DateTimeFormatter`**
-
-Más limpio cuando el formato es estándar:
+**Opción 2 — con `DateTimeFormatter`** ← preferida en examen
 
 ```java
-DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-d.format(fmt)    // → "24/05/2026"
+LocalDate fecha = LocalDate.of(2026, 6, 2);
+LocalDateTime fechaHora = LocalDateTime.of(2026, 6, 2, 14, 30);
+
+DateTimeFormatter fmt1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+DateTimeFormatter fmt2 = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy");
+DateTimeFormatter fmt3 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+System.out.println(fecha.format(fmt1));      // → 02/06/2026
+System.out.println(fecha.format(fmt2));      // → 02 de junio de 2026
+System.out.println(fechaHora.format(fmt3));  // → 02/06/2026 14:30
+
+// Parsear: String → objeto
+LocalDate parseada = LocalDate.parse("25/12/2026", fmt1);
 ```
 
 | Letra | Significa | Ejemplo |
 |---|---|---|
-| `dd` | día con 2 dígitos | `05` |
-| `MM` | mes con 2 dígitos | `05` |
+| `dd` | día con 2 dígitos | `02` |
+| `MM` | mes numérico | `06` |
+| `MMMM` | mes en texto | `junio` |
 | `yyyy` | año con 4 dígitos | `2026` |
-| `HH` | hora (0-23) | `10` |
+| `HH` | hora (0-23) | `14` |
 | `mm` | minuto | `30` |
+| `ss` | segundo | `00` |
+
+> Texto literal dentro del patrón va entre comillas simples: `'de'`.
+
+> Para forzar español en `MMMM`: `DateTimeFormatter.ofPattern("...", new Locale("es"))`
 
 ---
 
 ## 6. equals y hashCode
 
-### ¿Para qué sirven?
+Ver guía completa con ejemplos: [teoria/ut8/equals-y-hashcode.md](..\teoria\ut8\equals-y-hashcode.md)
 
-El `equals` natural (el de `Object`) compara **referencias** — dos objetos son iguales solo si son el mismo objeto en memoria (igual que `==`).
+---
 
-Si quieres que dos objetos distintos en memoria sean considerados iguales por su **contenido**, tienes que sobreescribir `equals`.
+## 7. Strings — format y StringBuilder
 
-### Contrato Java
+### String.format
 
-Si sobreescribes `equals`, **siempre** debes sobreescribir `hashCode`. El contrato dice:
-> Si dos objetos son iguales por `equals`, deben tener el mismo `hashCode`.
-
-Si lo rompes, las colecciones basadas en hash (`HashMap`, `HashSet`) fallarán silenciosamente.
-
-### Plantilla de equals
+Construye un String con formato sin imprimir. Mismo sistema de especificadores que `printf`.
 
 ```java
-@Override
-public boolean equals(Object obj)
-{
-    if (this == obj)
-        return true;
-    if (obj == null)
-        return false;
-    if (getClass() != obj.getClass())
-        return false;
-
-    MiClase other = (MiClase) obj;
-
-    return this.getCampo1().equals(other.getCampo1())
-        && this.getCampo2().equals(other.getCampo2());
-}
+String s = String.format("Nombre: %s, Edad: %d, Saldo: %.2f", "Ana", 25, 1500.50);
+// → "Nombre: Ana, Edad: 25, Saldo: 1500,50"
 ```
 
-### Plantilla de hashCode
+| Especificador | Tipo | Ejemplo |
+|---|---|---|
+| `%s` | String | `"Ana"` |
+| `%d` | entero | `25` |
+| `%f` | decimal | `1500.500000` |
+| `%.2f` | decimal 2 decimales | `1500.50` |
+| `%02d` | entero con ceros a la izquierda | `05` |
+| `%n` | salto de línea | — |
+
+> Diferencia con `printf`: `printf` imprime directamente, `String.format` devuelve el String para usarlo donde quieras.
+
+---
+
+### StringBuilder
+
+- `String` ES INMUTABLE — cada concatenación con `+` crea un objeto nuevo en memoria.
+- `StringBuilder` ES MUTABLE: construye el texto en el mismo objeto, sin crear copias.
+
+**Cuándo usarlo:** cuando concatenas en un bucle o lees un fichero carácter a carácter.
 
 ```java
-@Override
-public int hashCode()
-{
-    return Objects.hash(campo1, campo2);
-}
+StringBuilder sb = new StringBuilder();
+
+sb.append("Hola");        // añade al final       → "Hola"
+sb.append(", ");          // añade al final       → "Hola, "
+sb.append("mundo");       // añade al final       → "Hola, mundo"
+sb.insert(5, "Java ");    // inserta en posición  → "Hola, Java mundo"
+
+String resultado = sb.toString();  // convierte a String
 ```
 
-`Objects.hash(...)` genera un número a partir de los campos — dos objetos con los mismos valores dan el mismo número.
+**Uso típico en ficheros** — leer un fichero completo carácter a carácter en una sola pasada:
 
-### Cuándo necesitas cada cosa
+```java
+StringBuilder sb = new StringBuilder();
+int c;
+while ((c = reader.read()) != -1)
+{
+    sb.append((char) c);
+}
 
-| Colección | Qué necesita |
-|-----------|-------------|
-| `TreeMap` / `TreeSet` | `Comparable` (o `Comparator`) |
-| `HashMap` / `HashSet` / `LinkedHashMap` / `LinkedHashSet` | `equals` + `hashCode` |
-| Ambas | Todo |
+String contenido = sb.toString();
+```
+
+| Método | Qué hace |
+|---|---|
+| `append(x)` | Añade `x` al final — acepta String, char, int, double... |
+| `insert(pos, x)` | Inserta `x` en la posición `pos` |
+| `toString()` | Devuelve el contenido como `String` |
+| `length()` | Longitud actual del contenido |
+| `delete(ini, fin)` | Elimina caracteres entre `ini` y `fin` (fin excluido) |

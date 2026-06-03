@@ -2,8 +2,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class app2
 {
@@ -93,6 +95,14 @@ public class app2
 
         System.out.println();
         System.out.println("==================================");
+
+        // Opcion 3 - programacion funcional
+
+        List<Integer> opcion3 = distintos.stream()
+                .sorted()
+                .collect(Collectors.toList());
+        for (Integer i : opcion3)
+            System.out.print(i + " ");
 
         sc.close();
     }

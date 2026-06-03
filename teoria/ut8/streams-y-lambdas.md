@@ -170,7 +170,7 @@ colección.stream()
 
 ## 6. Operaciones intermedias
 
-DEVUELVEN UN NUEVO STREA — se pueden encadenar.  
+DEVUELVEN UN NUEVO STREAM — se pueden encadenar.  
 **No hacen nada hasta que hay una operación terminal.**
 ```java
 // Filtrar — conserva los que cumplen la condición

@@ -19,6 +19,10 @@ public class App
         {
             long total = calcularTamanio(dir);
             System.out.println("Tamanio total: " + total + " bytes");
+
+            int profundidad = calcularProfundidad(dir);
+            System.out.println("Profundidad: " + profundidad);
+
         }
 
         sc.close();
@@ -36,6 +40,24 @@ public class App
                 total += calcularTamanio(f);  // llamada recursiva
         }
 
-        return total;
+        return (total);
     }
+
+    public static int calcularProfundidad(File directorio)
+    {
+        int max = 0;
+
+        for (File f : directorio.listFiles())
+        {
+          if (f.isDirectory())
+          {
+              int profundidad = 1 + calcularProfundidad(f);
+              if (profundidad > max)
+                  max = profundidad;
+          }
+        }
+
+        return (max);
+    }
+
 }
