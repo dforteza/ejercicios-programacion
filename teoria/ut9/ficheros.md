@@ -75,7 +75,7 @@ FileOutputStream / FileInputStream    → base, byte a byte
 
 ## 3. La clase File
 
-`File` representa una **ruta** dentro del sistema de ficheros. No es el contenido del fichero — es solo la dirección. Se puede crear el objeto aunque el fichero no exista todavía.
+`File` representa una **ruta** dentro del sistema de ficheros. NO ES EL CONTENIDO — ES SOLO LA DIRECCIÓN. Se puede crear el objeto aunque el fichero no exista todavía.
 
 ```java
 import java.io.File;

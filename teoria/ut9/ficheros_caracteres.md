@@ -105,7 +105,7 @@ fr.close();
 
 ## 3. PrintWriter - ESCRITURA FORMATEADA
 
-Envuelve `FileWriter` y añade escritura directa de cualquier tipo (`int`, `double`, `boolean`...) y formateo con `printf`. Es la opción más cómoda para escribir.
+Envuelve `FileWriter` y AÑADE ESCRITURA DIRECTA DE CUALQUIER TIPO DE DATO (`int`, `double`, `boolean`...) y formateo con `printf`. Es la opción más cómoda para escribir.
 
 ```java
 FileWriter fw  = new FileWriter("datos.txt");

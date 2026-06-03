@@ -8,6 +8,7 @@
 5. [Fechas y horas — java.time](#5-fechas-y-horas--javatime)
 6. [equals y hashCode](#6-equals-y-hashcode)
 7. [Strings — format y StringBuilder](#7-strings--format-y-stringbuilder)
+8. [Atributo static como autoincrementador de ID](#8-atributo-static-como-autoincrementador-de-id)
 
 ---
 
@@ -398,3 +399,100 @@ String contenido = sb.toString();
 | `toString()` | Devuelve el contenido como `String` |
 | `length()` | Longitud actual del contenido |
 | `delete(ini, fin)` | Elimina caracteres entre `ini` y `fin` (fin excluido) |
+
+---
+
+## 8. Atributo static como autoincrementador de ID
+
+Cuando un ejercicio pide que cada objeto tenga un `id` único y autogenerado, usa un atributo `static` en la propia clase como contador:
+
+```java
+public class Paseo
+{
+    private static int secuencia = 0;  // una sola copia compartida por todos los objetos
+    private int id;
+
+    public Paseo(String nombre, ...) {
+        this.id = ++secuencia;  // se incrementa antes de asignar: primer objeto → id 1
+        ...
+    }
+}
+```
+
+**Flujo al crear objetos:**
+```
+new Paseo("Toby",  ...)  →  secuencia = 1  →  id = 1
+new Paseo("Laika", ...)  →  secuencia = 2  →  id = 2
+new Paseo("Tala",  ...)  →  secuencia = 3  →  id = 3
+```
+
+**Por qué funciona:** `static` hace que la variable pertenezca a la clase, no a cada objeto. Todos los objetos leen y modifican el mismo contador.
+
+**`++secuencia` vs `secuencia++`:**
+- `++secuencia` → incrementa primero, asigna después → el primer id es 1
+- `secuencia++` → asigna primero, incrementa después → el primer id sería 0
+
+---
+
+## 9. Polimorfismo de referencia
+
+Una referencia de tipo padre puede apuntar a cualquier objeto hijo:
+
+```
+Vehiculo
+  ├── Camion
+  ├── Furgoneta
+  └── Motocicleta
+```
+
+```java
+Vehiculo v = new Camion(...);     // ✓ Camion ES Vehiculo
+Vehiculo v = new Furgoneta(...);  // ✓ Furgoneta ES Vehiculo
+Camion c   = new Vehiculo(...);   // ✗ Vehiculo NO es necesariamente Camion
+```
+
+**¿Por qué es útil?**
+
+```java
+public void alta(Vehiculo v)  // acepta Camion, Furgoneta y Motocicleta
+```
+
+Con `Vehiculo` en la firma admites cualquier subclase. Lo mismo con colecciones:
+
+```java
+List<Mascota> lista = new ArrayList<>();   // ✓
+List<Mascota> lista = new LinkedList<>();  // ✓
+```
+
+**Al llamar métodos**, Java ejecuta siempre el del objeto real, no el del tipo de la referencia:
+
+```java
+Vehiculo v = new Camion(...);
+v.toString();  // ejecuta toString() de Camion, no de Vehiculo
+```
+
+---
+
+## 10. Widening conversion
+
+Java convierte automáticamente de menor a mayor precisión:
+
+```
+byte → short → int → long → float → double
+                              ↑
+                            char →
+```
+
+```java
+int    i = 100;
+long   l = i;      // automático ✓
+float  f = l;      // automático ✓
+double d = f;      // automático ✓
+```
+
+En sentido contrario necesitas cast explícito y puedes perder datos:
+
+```java
+double d = 9.99;
+int    i = (int) d;  // → 9, pierde decimales
+```

@@ -10,6 +10,8 @@ public class App {
 
         if (!datos.createNewFile())
         {
+            System.out.println("El fichero ya existe");
+            
             datos.renameTo(informacion);
             System.out.println("datos.txt renombrado a informacion.txt");
         }

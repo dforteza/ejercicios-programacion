@@ -26,7 +26,7 @@ public class App
 
             String texto = sb.toString();
 
-            if (texto.isBlank())
+            if (texto.isEmpty())
             {
                 System.out.println("El fichero está vacío.");
                 return;

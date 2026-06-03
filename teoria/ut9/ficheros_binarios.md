@@ -135,7 +135,7 @@ fis.close();
 
 ### ¿Cuándo usarlos?
 
-Cuando quieres guardar un objeto completo o una colección entera de golpe, sin tener que escribir campo a campo. Java convierte el objeto entero a bytes automáticamente — esto se llama **serialización**.
+Cuando quieres guardar un objeto completo o una colección entera de golpe, sin tener que escribir campo a campo. JAVA CONVIERTE EL OBJETO ENTERO A BYTES automáticamente — esto se llama **serialización**.
 
 ### Requisito: LA CLASE DEBE IMPLEMENTAR `Serializable`
 
