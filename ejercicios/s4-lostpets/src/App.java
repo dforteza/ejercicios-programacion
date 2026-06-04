@@ -1,3 +1,4 @@
+import java.io.File;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -68,8 +69,26 @@ public class App {
         repositorio.bajaBytTelefono("633444555");
         System.out.println(repositorio);
 
+        // Persistencia texto
+        File ficheroTexto = new File("mascotas.txt");
 
+        System.out.println("=== ESCRIBIR FICHERO TEXTO ===");
+        repositorio.escribirDatosTexto(ficheroTexto);
 
+        System.out.println("=== LEER FICHERO TEXTO ===");
+        LostPetRepository repositorioTexto = new LostPetRepositoryImpl();
+        repositorioTexto.leerDatosTexto(ficheroTexto);
+        System.out.println(repositorioTexto);
 
+        // Persistencia binaria (ObjectStream)
+        File ficheroBinario = new File("mascotas.dat");
+
+        System.out.println("=== ESCRIBIR FICHERO BINARIO ===");
+        repositorio.escribirDatosBinario(ficheroBinario);
+
+        System.out.println("=== LEER FICHERO BINARIO ===");
+        LostPetRepository repositorioBinario = new LostPetRepositoryImpl();
+        repositorioBinario.leerDatosBinario(ficheroBinario);
+        System.out.println(repositorioBinario);
     }
 }

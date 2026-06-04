@@ -138,3 +138,80 @@ char cifrada = (char) ('a' + (c - 'a' + desplazamiento) % 26);
 // Desencriptar = cifrar con el desplazamiento inverso
 cifrar(texto, 26 - desplazamiento);
 ```
+
+---
+
+### Persistir una colección de objetos — 3 formas
+
+#### Texto (`FileWriter` + `BufferedWriter` / `FileReader` + `BufferedReader`)
+
+```java
+// Escribir
+for (Prenda p : prendas)
+{
+    bw.write(p.toStringPersist());
+    bw.newLine();
+}
+
+// Leer
+String linea;
+while ((linea = br.readLine()) != null)
+{
+    String[] datos = linea.split(";");
+    if (datos[0].equals("TIPO_A"))
+        lista.add(new TipoA(datos[1], datos[2], ...));
+    else
+        lista.add(new TipoB(datos[1], datos[2], ...));
+}
+```
+
+- `toStringPersist()` — método propio con separador fijo (`;`). Incluir el tipo como `datos[0]` si hay herencia.
+- `LocalDate` → guardar con `.toString()`, leer con `LocalDate.parse(datos[n])`.
+- `boolean` → guardar como `"true"`/`"false"`, leer con `Boolean.parseBoolean(datos[n])`.
+
+---
+
+#### Data (`FileOutputStream + DataOutputStream` / `FileInputStream + DataInputStream`)
+
+```java
+// Escribir
+for (Objeto o : lista)
+{
+    dos.writeUTF(o.getCampo1());
+    dos.writeUTF(o.getCampo2());
+    // mismo orden siempre
+}
+
+// Leer
+while (true)
+{
+    try
+    {
+        String campo1 = dis.readUTF();
+        String campo2 = dis.readUTF();
+        lista.add(new Objeto(campo1, campo2));
+    }
+    catch (EOFException e)
+    {
+        break;
+    }
+}
+```
+
+- Campo a campo, en el **mismo orden** que se escribió.
+- `while(true)` + `catch(EOFException)` es el patrón correcto — no usar `available() > 0`.
+
+---
+
+#### Binario (`FileOutputStream + ObjectOutputStream` / `FileInputStream + ObjectInputStream`)
+
+```java
+// Escribir
+oos.writeObject(lista);   // serializa la lista entera de golpe
+
+// Leer
+lista = (List<Objeto>) ois.readObject();   // deserializa la lista entera
+```
+
+- La clase debe implementar `Serializable`. Las subclases lo heredan.
+- Es la forma más simple — no hay separadores ni parseo manual.

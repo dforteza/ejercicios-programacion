@@ -1,5 +1,15 @@
 package Repository;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -142,4 +152,115 @@ public class LostPetRepositoryImpl implements LostPetRepository
             sb.append(m).append("\n");
         return sb.toString();
     }
+
+    @Override
+    public void escribirDatosBinario(File f)
+    {
+        try
+        {
+            FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(mascotas);
+
+            System.out.println("Fichero binario escrito correctamente");
+
+            oos.close();
+            fos.close();
+        
+        } catch (IOException e) 
+        {
+            System.out.println("Error de escritura ");
+            e.printStackTrace();
+        }
+
+                
+    }
+
+    @Override
+    public void escribirDatosTexto(File f) {
+        
+        try 
+        {
+            FileWriter fw = new FileWriter(f, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            for (Mascota m : mascotas)
+            {
+                bw.write(m.toString());
+                bw.newLine();
+            }
+
+            System.out.println("Fichero escrito correctamente");
+        
+            bw.close();
+            fw.close();
+        
+        } catch (IOException e) 
+        {
+           System.out.println("Error al escribir");
+           e.printStackTrace();
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void leerDatosBinario(File f) 
+    {
+        try 
+        {
+            FileInputStream fis = new FileInputStream(f);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            mascotas = (List<Mascota>) ois.readObject(); 
+
+            ois.close();
+            fis.close();
+        
+        } catch (IOException e) 
+        {
+            System.out.println("Error de carga de archivo: ");
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) 
+        {
+            System.out.println("Error de lectura de fichero");
+            e.printStackTrace();
+        }
+        
+        
+    }
+
+    @Override
+    public void leerDatosTexto(File f) 
+    {
+        try 
+        {
+            FileReader fr = new FileReader(f);
+            BufferedReader br = new BufferedReader(fr);
+
+            String linea;
+            while ((linea = br.readLine()) != null)
+            {
+                String[] datos = linea.split(" - ");
+                Mascota m = new Mascota(datos[0], datos[1], datos[2], LocalDate.parse(datos[3]), datos[4]);
+                mascotas.add(m);
+            }
+
+            System.out.println("Fichero leido correctamente");
+
+            br.close();
+            fr.close();
+            
+        } catch (IOException e) 
+        {
+            System.out.println("Error al leer");
+            e.printStackTrace();
+        }
+        
+        
+    }
+
+
+
+    
 }

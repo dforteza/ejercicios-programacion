@@ -1,8 +1,10 @@
 package Model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-public class Mascota implements Comparable<Mascota>
+public class Mascota implements Comparable<Mascota>, Serializable
 {
     private String      nombre;
     private String      especie;
@@ -10,6 +12,8 @@ public class Mascota implements Comparable<Mascota>
     private LocalDate   fechaDesaparicion;
     private String      tlf;
     
+    private final DateTimeFormatter fmt1 = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
     public Mascota(String nombre, String especie, String descripcion, LocalDate fechaDesaparicion, String tlf) {
         this.nombre = nombre;
         this.especie = especie;
@@ -95,7 +99,7 @@ public class Mascota implements Comparable<Mascota>
     @Override
     public String toString()
     {
-        return nombre + " - " + especie + " - " + descripcion + " - " + fechaDesaparicion + " - " + tlf;
+        return nombre + " - " + especie + " - " + descripcion + " - " + fechaDesaparicion.format(fmt1) + " - " + tlf;
     }
 
     @Override

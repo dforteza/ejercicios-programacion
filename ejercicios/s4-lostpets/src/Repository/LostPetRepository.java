@@ -1,5 +1,6 @@
 package Repository;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -22,4 +23,10 @@ public interface LostPetRepository
     public void     eliminarDuplicados();
     public HashMap<String, Integer> contarPorEspecie();
     public TreeMap<LocalDate, List<Mascota>> agruparPorFecha();
+
+    void    leerDatosTexto(File f);
+    void    escribirDatosTexto(File f);
+
+    void    leerDatosBinario(File f);
+    void    escribirDatosBinario(File f);
 }
