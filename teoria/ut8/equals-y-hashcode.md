@@ -8,7 +8,7 @@
 
 ---
 
-## Contrato Java
+## Contrato Java - EQUALS Y HASCODE DE LA MANOOOOO
 
 Si sobreescribes `equals`, **siempre** debes sobreescribir `hashCode`. El contrato dice:
 > Si dos objetos son iguales por `equals`, deben tener el mismo `hashCode`.

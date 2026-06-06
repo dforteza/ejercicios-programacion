@@ -1,0 +1,6 @@
+EQUIPO;1;Real Madrid;90
+EQUIPO;2;Barcelona;85
+EQUIPO;5;Atletico Madrid;78
+FILIAL;3;Real Madrid Castilla;45;Real Madrid
+FILIAL;4;Barcelona B;40;Barcelona
+FILIAL;6;Atletico B;30;Atletico Madrid

@@ -5,7 +5,7 @@
 | Método | Qué hace |
 |---|---|
 | `add(e)` / `put(k,v)` | Añade elemento o par clave-valor |
-| `remove(e)` | Elimina el elemento |
+| `remove(e ó index)` | Elimina el elemento |
 | `contains(e)` / `containsKey(k)` | Comprueba si existe |
 | `size()` | Número de elementos |
 | `isEmpty()` | true si está vacía |
