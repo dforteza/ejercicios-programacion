@@ -44,12 +44,10 @@ public class EquiposImpl implements Equipos
     @Override
     public void delete(int codigo) 
     {
-        for (Equipo e : equipos)
-            if (e.getCodigo() == codigo)
-            {
-                equipos.remove(e);
-                break ;
-            }
+      Optional<Equipo> equipo = findById(codigo);
+
+      equipo.ifPresent(e -> equipos.remove(e));
+
     }
     
     @Override
@@ -101,7 +99,11 @@ public class EquiposImpl implements Equipos
             try
             {
                 equipos = (List<Equipo>) ois.readObject();
-                int maxCodigo = equipos.stream().mapToInt(Equipo::getCodigo).max().orElse(0);
+                int maxCodigo = equipos
+                                .stream()
+                                .mapToInt(Equipo::getCodigo)
+                                .max()
+                                .orElse(0);
                 Equipo.setSecuencia(maxCodigo);
             } catch (ClassNotFoundException e)
             {

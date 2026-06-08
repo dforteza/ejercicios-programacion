@@ -1,6 +1,7 @@
 # Ordenar Set y Map
 
-`Collections.sort()` solo acepta `List` porque necesita acceder a elementos por índice para intercambiarlos. `Set` y `Map` no tienen índices, así que no se pueden ordenar directamente.
+ `Collections.sort(List<T> lista)` está definido específicamente para listas, porque el algoritmo necesita poder acceder
+  y reordenar elementos por posición `(get(i), set(i, valor))`.
 
 La solución: volcar a una `List` primero.
 
